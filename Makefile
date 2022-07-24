@@ -1,5 +1,18 @@
-test_sdl:
-	g++ -Isdl/include -Lsdl/lib -o test test_sdl.cpp -lmingw32 -lSDL2main -lSDL2
+CXX = g++.exe
+LIB = -lmingw32 -lSDL2main -lSDL2
+SDL = -Isdl/include -Lsdl/lib
+
+mandlebrot: build/renderer.o src/main.cpp
+	$(CXX) $(SDL) -o mandlebrot.exe src/main.cpp build/*.o $(LIB)
+
+build/renderer.o: src/renderer.cpp
+	$(CXX) $(SDL) -c -o build/renderer.o src/renderer.cpp $(LIB)
+
+clean:
+	rm -f mandlebrot.exe test.exe build/*.o
+
+test: test_sdl.cpp
+	$(CXX) $(SDL) -o test.exe test_sdl.cpp $(LIB)
 
 download_sdl:
 	rm -rf sdl

@@ -1,2 +1,4 @@
 SDL2.dll
 sdl
+*.exe
+build

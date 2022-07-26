@@ -4,6 +4,8 @@
 #include <chrono>
 #include <iostream>
 
+#define ZOOM_STEP 0.1
+
 Renderer::Renderer(int width, int height) {
   this->width = width;
   this->height = height;
@@ -14,8 +16,7 @@ Renderer::Renderer(int width, int height) {
     exit(1);
   }
 
-  window = SDL_CreateWindow("Mandlebrot zoomer", SDL_WINDOWPOS_UNDEFINED,
-                            SDL_WINDOWPOS_UNDEFINED, width, height, 0);
+  window = SDL_CreateWindow("Mandlebrot zoomer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, 0);
   if (!window) {
     std::cout << "Error: Failed to open window\nSDL Error: '%s'\n"
               << SDL_GetError();
@@ -24,14 +25,12 @@ Renderer::Renderer(int width, int height) {
 
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
   if (!renderer) {
-    std::cout << "Error: Failed to create renderer\nSDL Error: '%s'\n"
-              << SDL_GetError();
+    std::cout << "Error: Failed to create renderer\nSDL Error: '%s'\n" << SDL_GetError();
     exit(3);
   }
 
   buffer = new Uint8[width * height * 3];
-  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
-                              SDL_TEXTUREACCESS_STREAMING, width, height);
+  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
 
   has_calculator = false;
 }
@@ -61,9 +60,29 @@ void Renderer::start(range re, range im) {
       }
 
 			if (event.type == SDL_KEYDOWN) {
-				if (event.key.keysym.sym == SDLK_RETURN) {
-					std::cout << "KEY DOWN!\n";
+				if (event.key.keysym.sym == SDLK_RETURN || event.key.keysym.sym == SDLK_SPACE) {
+					re.shrink(ZOOM_STEP);
+					im.shrink(ZOOM_STEP);
+					break;
+				}
 
+				if (event.key.keysym.sym == SDLK_LEFT) {
+					re.shift(-ZOOM_STEP);
+					break;
+				}
+
+				if (event.key.keysym.sym == SDLK_RIGHT) {
+					re.shift(ZOOM_STEP);
+					break;
+				}
+
+				if (event.key.keysym.sym == SDLK_UP) {
+					im.shift(-ZOOM_STEP);
+					break;
+				}
+
+				if (event.key.keysym.sym == SDLK_DOWN) {
+					im.shift(ZOOM_STEP);
 					break;
 				}
 			}

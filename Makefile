@@ -1,12 +1,13 @@
 CXX = g++.exe
 LIB = -lmingw32 -lSDL2main -lSDL2
 SDL = -Isdl/include -Lsdl/lib
+OPT = -O3
 
 mandlebrot: build/renderer.o src/main.cpp
-	$(CXX) $(SDL) -o mandlebrot.exe src/main.cpp build/*.o $(LIB)
+	$(CXX) $(SDL) -o mandlebrot.exe src/main.cpp build/*.o $(LIB) $(OPT)
 
 build/renderer.o: src/renderer.cpp
-	$(CXX) $(SDL) -c -o build/renderer.o src/renderer.cpp $(LIB)
+	$(CXX) $(SDL) -c -o build/renderer.o src/renderer.cpp $(LIB) $(OPT)
 
 clean:
 	rm -f mandlebrot.exe test.exe build/*.o

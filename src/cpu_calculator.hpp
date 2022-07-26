@@ -6,14 +6,18 @@
 
 #include "calculator.hpp"
 
-bool is_mandlebrot(std::complex<double> c) {
+#define MAX_ITER 60
+
+int is_mandlebrot(std::complex<double> c) {
 	std::complex<double> z{0, 0};
 
-	for (int i = 0; i < 200; i++) {
+	auto i = 0;
+	while (std::abs(z) <= 2 && i < MAX_ITER) {
 		z = z * z + c;
+		i++;
 	}
 
-	return (z.real() * z.real()) + (z.imag() * z.imag()) < 1000;
+	return i;
 }
 
 class CPU_Calculator : public Calculator {
@@ -31,7 +35,7 @@ public:
 				point_im = im.start + im_step * j;
 
 				auto complex = std::complex<double>{point_re, point_im};
-				auto converges = is_mandlebrot(complex);
+				auto converges = is_mandlebrot(complex) >= 50;
 
         auto color = &buffer[3 * (j * x + i)];
 				color[0] = converges ?  50 : 0;

@@ -11,8 +11,7 @@ Renderer::Renderer(int width, int height) {
   this->height = height;
 
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    std::cout << "Error: SDL failed to initialize\nSDL Error: '%s'\n"
-              << SDL_GetError();
+    std::cout << "Error: SDL failed to initialize\nSDL Error: '%s'\n" << SDL_GetError();
     exit(1);
   }
 
@@ -50,6 +49,7 @@ void Renderer::start(range re, range im) {
   void *pixels;
   int pitch;
 
+	bool render = true;
   bool done = false;
   while (!done) {
 
@@ -60,6 +60,8 @@ void Renderer::start(range re, range im) {
       }
 
 			if (event.type == SDL_KEYDOWN) {
+				render = true;
+
 				if (event.key.keysym.sym == SDLK_RETURN || event.key.keysym.sym == SDLK_SPACE) {
 					re.shrink(ZOOM_STEP);
 					im.shrink(ZOOM_STEP);
@@ -90,24 +92,28 @@ void Renderer::start(range re, range im) {
 
 		if (done) break;
 
-    auto start = std::chrono::high_resolution_clock::now();
-    calculator->compute(re, im, width, height, buffer);
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-    std::cout << "Time to calculate: " << duration.count() << "ms\n";
+		if (render) {
+			auto start = std::chrono::high_resolution_clock::now();
+			calculator->compute(re, im, width, height, buffer);
+			auto stop = std::chrono::high_resolution_clock::now();
+			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+			std::cout << "Time to calculate: " << duration.count() << "ms\n";
 
-    SDL_LockTexture(texture, NULL, &pixels, &pitch);
-    for (auto y = 0; y < height; y++) {
-      auto dst = (Uint32 *)((Uint8 *)pixels + y * pitch);
-      for (auto x = 0; x < width; x++) {
-        auto color = &buffer[3 * (y * width + x)];
-        *dst++ = (0xFF000000 | color[0] << 16 | color[1] << 8 | color[2]);
-      }
-    }
-    SDL_UnlockTexture(texture);
+			SDL_LockTexture(texture, NULL, &pixels, &pitch);
+			for (auto y = 0; y < height; y++) {
+				auto dst = (Uint32 *)((Uint8 *)pixels + y * pitch);
+				for (auto x = 0; x < width; x++) {
+					auto color = &buffer[3 * (y * width + x)];
+					*dst++ = (0xFF000000 | color[0] << 16 | color[1] << 8 | color[2]);
+				}
+			}
+			SDL_UnlockTexture(texture);
 
-    SDL_RenderCopy(renderer, texture, NULL, NULL);
-    SDL_RenderPresent(renderer);
+			SDL_RenderCopy(renderer, texture, NULL, NULL);
+			SDL_RenderPresent(renderer);
+		}
+
+		render = false;
   }
 }
 

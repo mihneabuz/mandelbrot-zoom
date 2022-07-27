@@ -6,7 +6,7 @@
 
 #include "calculator.hpp"
 
-#define MAX_ITER 100
+#define MAX_ITER 200
 
 inline int is_mandlebrot(const std::complex<double> c) {
 	std::complex<double> z{0, 0};
@@ -21,9 +21,9 @@ inline int is_mandlebrot(const std::complex<double> c) {
 }
 
 inline void iter_to_color(const int iter, Uint8 *color) {
-	auto gradient =  (double)(iter * iter) / (double)(MAX_ITER * MAX_ITER);
-	color[0] =  50 * gradient;
-	color[1] = 150 * gradient;
+	float gradient = (float)(iter * iter) / (MAX_ITER * MAX_ITER);
+	color[0] =  70 * gradient;
+	color[1] =  20 * gradient;
 	color[2] = 250 * gradient;
 }
 

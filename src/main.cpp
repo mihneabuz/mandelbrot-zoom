@@ -24,7 +24,7 @@ int main (int argc, char *argv[])
 
 	auto renderer = Renderer(width, height);
 
-	renderer.attach_calculator(new CPU_Calculator<double, 200>());
+	renderer.attach_calculator(new CPU_Calculator());
 
 	renderer.start({-2, 1}, {-1, 1});
 

@@ -1,6 +1,4 @@
-#include <cstdlib>
 #include <iostream>
-#include <string>
 
 #include "renderer.hpp"
 #include "cpu_calculator.hpp"

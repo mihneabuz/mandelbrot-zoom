@@ -1,10 +1,11 @@
-CXX = g++.exe
-LIB = -lmingw32 -lSDL2main -lSDL2
+CXX = g++
+LIB = -lSDL2main -lSDL2
 SDL = -Isdl/include -Lsdl/lib
 OPT = -O3
+CUDA = -lcuda -lcudart
 
-mandlebrot: build/renderer.o build/cpu_calculator.o src/main.cpp
-	$(CXX) $(SDL) -o mandlebrot.exe src/main.cpp build/*.o $(LIB) $(OPT)
+mandlebrot: build/renderer.o build/cpu_calculator.o build/cuda_compute.o src/main.cpp
+	$(CXX) $(SDL) -o mandlebrot src/main.cpp build/*.o $(LIB) $(OPT) $(CUDA)
 
 build/renderer.o: src/renderer.cpp
 	$(CXX) $(SDL) -c -o build/renderer.o src/renderer.cpp $(LIB) $(OPT)
@@ -12,11 +13,14 @@ build/renderer.o: src/renderer.cpp
 build/cpu_calculator.o: src/cpu_calculator.cpp
 	$(CXX) $(SDL) -c -o build/cpu_calculator.o src/cpu_calculator.cpp $(LIB) $(OPT)
 
+build/cuda_compute.o: src/cuda/compute.cu
+	nvcc -c -o build/cuda_compute.o src/cuda/compute.cu
+
 clean:
-	rm -f mandlebrot.exe test.exe build/*.o
+	rm -f mandlebrot test build/*.o
 
 test: test_sdl.cpp
-	$(CXX) $(SDL) -o test.exe test_sdl.cpp $(LIB)
+	$(CXX) $(SDL) -o test test_sdl.cpp $(LIB)
 
 download_sdl:
 	rm -rf sdl

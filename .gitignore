@@ -1,4 +1,6 @@
 SDL2.dll
 sdl
 *.exe
+test
+mandlebrot
 build

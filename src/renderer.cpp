@@ -4,8 +4,6 @@
 #include <chrono>
 #include <iostream>
 
-#define ZOOM_STEP 0.1
-
 Renderer::Renderer(int width, int height) {
   this->width = width;
   this->height = height;
@@ -49,6 +47,8 @@ void Renderer::start(range re, range im) {
   void *pixels;
   int pitch;
 
+	float zoom_step = calculator->getZoomStep();
+
 	bool render = true;
   bool done = false;
   while (!done) {
@@ -63,28 +63,28 @@ void Renderer::start(range re, range im) {
 				render = true;
 
 				if (event.key.keysym.sym == SDLK_RETURN || event.key.keysym.sym == SDLK_SPACE) {
-					re.shrink(ZOOM_STEP);
-					im.shrink(ZOOM_STEP);
+					re.shrink(zoom_step);
+					im.shrink(zoom_step);
 					break;
 				}
 
 				if (event.key.keysym.sym == SDLK_LEFT) {
-					re.shift(-ZOOM_STEP);
+					re.shift(-zoom_step);
 					break;
 				}
 
 				if (event.key.keysym.sym == SDLK_RIGHT) {
-					re.shift(ZOOM_STEP);
+					re.shift(zoom_step);
 					break;
 				}
 
 				if (event.key.keysym.sym == SDLK_UP) {
-					im.shift(-ZOOM_STEP);
+					im.shift(-zoom_step);
 					break;
 				}
 
 				if (event.key.keysym.sym == SDLK_DOWN) {
-					im.shift(ZOOM_STEP);
+					im.shift(zoom_step);
 					break;
 				}
 			}

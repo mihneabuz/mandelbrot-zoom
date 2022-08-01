@@ -9,13 +9,9 @@ class Cuda_Calculator : public Calculator {
 public:
 	Cuda_Calculator() {}
 
-	void compute(range re, range im, int x, int y, Uint8* buffer) {
-		std::cout << "incepem!" << x << ' ' << y << "\n";
-		cuda_compute(re.start, re.end, im.start, im.end, x, y, buffer);
+	float getZoomStep() { return 0.01; };
 
-		for (int i = 0; i < x * y * 3; i++) {
-			if (buffer[i] !=0 )
-				std::cout << buffer[i];
-		}
+	void compute(range re, range im, int x, int y, Uint8* buffer) {
+		cuda_compute(re.start, re.end, im.start, im.end, x, y, buffer);
 	};
 };

@@ -45,12 +45,12 @@ void thread_func(thread_args args) {
 }
 
 void CPU_Calculator::compute(range re, range im, int x, int y, Uint8* buffer) {
-	const double re_step = (re.end - re.start) / x;
-	const double im_step = (im.end - im.start) / y;
+	const double re_step = ((double)re.end - (double)re.start) / x;
+	const double im_step = ((double)im.end - (double)im.start) / y;
 
 	thread_args args;
-	args.im_start = im.start;
-	args.re_start = re.start;
+	args.im_start = (double)im.start;
+	args.re_start = (double)re.start;
 	args.im_step = im_step;
 	args.re_step = re_step;
 	args.x = x;

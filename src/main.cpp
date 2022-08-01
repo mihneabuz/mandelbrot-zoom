@@ -2,6 +2,7 @@
 
 #include "renderer.hpp"
 #include "cpu_calculator.hpp"
+#include "cuda_calculator.hpp"
 
 int main (int argc, char *argv[])
 {
@@ -22,7 +23,8 @@ int main (int argc, char *argv[])
 
 	auto renderer = Renderer(width, height);
 
-	renderer.attach_calculator(new CPU_Calculator());
+	// renderer.attach_calculator(new CPU_Calculator());
+	renderer.attach_calculator(new Cuda_Calculator());
 
 	renderer.start({-2, 1}, {-1, 1});
 

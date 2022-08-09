@@ -2,7 +2,7 @@ CXX = g++
 LIB = -lSDL2main -lSDL2
 SDL = -Isdl/include -Lsdl/lib
 OPT = -Ofast
-CUDA = -L/opt/cuda/targets/x86_64-linux/lib -lcuda -lcudart
+CUDA = -D CUDA -L/opt/cuda/targets/x86_64-linux/lib -lcuda -lcudart
 
 cpu: build/renderer.o build/cpu_calculator.o src/main.cpp
 	$(CXX) $(SDL) -o mandelbrot src/main.cpp build/*.o $(LIB) $(OPT)

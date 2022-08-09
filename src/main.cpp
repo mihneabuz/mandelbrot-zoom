@@ -23,8 +23,11 @@ int main (int argc, char *argv[])
 
 	auto renderer = Renderer(width, height);
 
-	// renderer.attach_calculator(new CPU_Calculator());
+#ifdef CUDA
 	renderer.attach_calculator(new Cuda_Calculator());
+#else
+	renderer.attach_calculator(new CPU_Calculator());
+#endif
 
 	renderer.start({-2, 1}, {-1, 1});
 

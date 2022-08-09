@@ -7,7 +7,7 @@
 int main (int argc, char *argv[])
 {
 	if (argc < 3) {
-		std::cout << "Usage: mandlebrot [width] [height]" << std::endl;
+		std::cout << "Usage: mandelbrot [width] [height]" << std::endl;
 		return 1;
 	}
 
@@ -24,9 +24,9 @@ int main (int argc, char *argv[])
 	auto renderer = Renderer(width, height);
 
 #ifdef CUDA
-	renderer.attach_calculator(new Cuda_Calculator());
+	renderer.attach_calculator(new Cuda_Calculator(200));
 #else
-	renderer.attach_calculator(new CPU_Calculator());
+	renderer.attach_calculator(new CPU_Calculator(100));
 #endif
 
 	renderer.start({-2, 1}, {-1, 1});

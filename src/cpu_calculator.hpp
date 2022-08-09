@@ -6,11 +6,11 @@
 
 #include "calculator.hpp"
 
-#define MAX_ITER 200
-
 class CPU_Calculator : public Calculator {
 public:
-	CPU_Calculator() {}
+  int max_iter;
+
+	CPU_Calculator(int x): max_iter(x) {}
 
 	float getZoomStep() { return 0.1; };
 

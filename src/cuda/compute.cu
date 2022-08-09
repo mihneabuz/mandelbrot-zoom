@@ -4,8 +4,6 @@
 
 #include <cstdint>
 
-#define MAX_ITER 200
-
 #define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
 inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true)
 {
@@ -21,7 +19,8 @@ __global__ void kernel(
 		double im_start, double im_step,
 		int start_x, int start_y,
 		int x, int y,
-		uint8_t* buffer
+		uint8_t* buffer,
+    int max_iter
 ) {
 	const auto i = start_x + blockIdx.x;
 	const auto j = start_y + threadIdx.x;
@@ -36,12 +35,12 @@ __global__ void kernel(
 	thrust::complex<double> z(0, 0);
 
 	auto iter = 0;
-	while (thrust::abs(z) <= 200 && iter < MAX_ITER) {
+	while (thrust::abs(z) <= 200 && iter < max_iter) {
 		z = z * z + c;
 		iter++;
 	}
 
-	float gradient = (float)(iter * iter) / (MAX_ITER * MAX_ITER);
+	float gradient = (float)(iter * iter) / (max_iter * max_iter);
 	int addr = 3 * (j * x + i);
 
 	buffer[addr]     =  70 * gradient;
@@ -55,7 +54,8 @@ void cuda_compute(
 		double re_start, double re_end,
 		double im_start, double im_end,
 		int x, int y,
-		uint8_t* buffer
+		uint8_t* buffer,
+    int max_iter
 	) {
 
 	int bufferSize = x * y * 3 * sizeof(uint8_t);
@@ -69,7 +69,7 @@ void cuda_compute(
 	while (i < x) {
 		auto j = 0;
 		while (j < y) {
-			kernel<<<kern, kern>>>(re_start, re_step, im_start, im_step, i, j, x, y, cudaBuffer);
+			kernel<<<kern, kern>>>(re_start, re_step, im_start, im_step, i, j, x, y, cudaBuffer, max_iter);
 			j += kern;
 		}
 		i += kern;

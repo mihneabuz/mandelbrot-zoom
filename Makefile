@@ -5,10 +5,10 @@ OPT = -Ofast
 CUDA = -L/opt/cuda/targets/x86_64-linux/lib -lcuda -lcudart
 
 cpu: build/renderer.o build/cpu_calculator.o src/main.cpp
-	$(CXX) $(SDL) -o mandlebrot src/main.cpp build/*.o $(LIB) $(OPT)
+	$(CXX) $(SDL) -o mandelbrot src/main.cpp build/*.o $(LIB) $(OPT)
 
 cuda: build/renderer.o build/cpu_calculator.o build/cuda_compute.o src/main.cpp
-	$(CXX) $(SDL) -o mandlebrot src/main.cpp build/*.o $(LIB) $(OPT) $(CUDA)
+	$(CXX) $(SDL) -o mandelbrot src/main.cpp build/*.o $(LIB) $(OPT) $(CUDA)
 
 build/renderer.o: src/renderer.cpp
 	$(CXX) $(SDL) -c -o build/renderer.o src/renderer.cpp $(LIB) $(OPT)

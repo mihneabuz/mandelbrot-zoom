@@ -2,5 +2,5 @@ SDL2.dll
 sdl
 *.exe
 test
-mandlebrot
+mandelbrot
 build

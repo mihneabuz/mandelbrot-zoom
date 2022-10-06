@@ -1,5 +1,5 @@
-# mandlebrot-zoom
-Mandlebrot zoomer with 2 implementations:
+# mandelbrot-zoom
+Mandelbrot zoomer with 2 implementations:
   * multi-threaded cpu implementation using all available cores
   * cuda implementation
 
